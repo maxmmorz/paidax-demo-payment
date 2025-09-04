@@ -183,23 +183,6 @@ export default function TopUpScreen() {
     return transferTimes[methodId] || 'Unknown';
   };
 
-  const getPaymentMethodDescription = (methodId: string) => {
-    const feeDisplay = formatFeePercentage(methodId);
-    const transferTime = getTransferTime(methodId);
-    const descriptions: Record<string, string> = {
-      'bank-transfer': 'Traditional bank transfer',
-      'bank-card': 'Visa, Mastercard accepted',
-      'kaspi': 'Instant transfer via Kaspi',
-      'sberbank': 'Russia\'s largest bank',
-      'yandex-money': 'Digital wallet service',
-      'paypal': 'Secure global payments',
-      'apple-pay': 'Pay with Touch/Face ID',
-      'usdt': 'Cryptocurrency payment'
-    };
-    
-    return `${descriptions[methodId] || 'Digital payment'} • Fee: ${feeDisplay} • ${transferTime}`;
-  };
-
   const renderPaymentForm = (methodId: string) => {
     switch (methodId) {
       case "bank-transfer":
@@ -468,7 +451,6 @@ export default function TopUpScreen() {
           const isExpanded = expandedPaymentMethod === method.id;
           const amountNumber = parseFloat(amount) || 0;
           const fee = calculateFee(method.id, amountNumber);
-          const description = getPaymentMethodDescription(method.id);
 
           return (
             <div
