@@ -18,6 +18,7 @@ export default function TopUpScreen() {
   const [expandedPaymentMethod, setExpandedPaymentMethod] = useState<
     string | null
   >(null);
+  const [amount, setAmount] = useState<string>("");
 
   const currencies = [
     { code: "KZT", symbol: "₸", name: "Kazakhstani Tenge" },
@@ -29,7 +30,7 @@ export default function TopUpScreen() {
     {
       id: "bank-transfer",
       name: "Bank Transfer",
-      description: "Direct account transfer",
+      description: "Traditional bank transfer",
       icon: Building2,
       bgColor: "bg-[#1436ee]/20",
       iconColor: "text-[#1436ee]",
@@ -39,7 +40,7 @@ export default function TopUpScreen() {
     {
       id: "bank-card",
       name: "Bank Card",
-      description: "Visa, Mastercard",
+      description: "Visa, Mastercard accepted",
       icon: CreditCard,
       bgColor: "bg-purple-500/20",
       iconColor: "text-purple-400",
@@ -49,7 +50,7 @@ export default function TopUpScreen() {
     {
       id: "kaspi",
       name: "Kaspi.kz",
-      description: "Quick transfer",
+      description: "Instant transfer via Kaspi",
       icon: Wallet,
       bgColor: "bg-green-500/20",
       iconColor: "text-green-400",
@@ -59,7 +60,7 @@ export default function TopUpScreen() {
     {
       id: "sberbank",
       name: "Sberbank",
-      description: "Online banking",
+      description: "Russia's largest bank",
       icon: Banknote,
       bgColor: "bg-green-600/20",
       iconColor: "text-green-600",
@@ -69,7 +70,7 @@ export default function TopUpScreen() {
     {
       id: "yandex-money",
       name: "YooMoney",
-      description: "Digital wallet",
+      description: "Digital wallet service",
       icon: Wallet,
       bgColor: "bg-yellow-500/20",
       iconColor: "text-yellow-600",
@@ -79,7 +80,7 @@ export default function TopUpScreen() {
     {
       id: "paypal",
       name: "PayPal",
-      description: "Digital payments",
+      description: "Secure global payments",
       icon: Wallet,
       bgColor: "bg-blue-500/20",
       iconColor: "text-blue-500",
@@ -89,7 +90,7 @@ export default function TopUpScreen() {
     {
       id: "apple-pay",
       name: "Apple Pay",
-      description: "Quick payment",
+      description: "Pay with Touch/Face ID",
       icon: Apple,
       bgColor: "bg-gray-700",
       iconColor: "text-white",
@@ -99,7 +100,7 @@ export default function TopUpScreen() {
     {
       id: "usdt",
       name: "USDT",
-      description: "Cryptocurrency",
+      description: "Cryptocurrency payment",
       icon: Bitcoin,
       bgColor: "bg-yellow-500/20",
       iconColor: "text-yellow-400",
@@ -112,6 +113,92 @@ export default function TopUpScreen() {
   const availablePaymentMethods = paymentMethods.filter((method) =>
     method.currencies.includes(selectedCurrency)
   );
+
+  // Fee calculation logic
+  const calculateFee = (methodId: string, amount: number) => {
+    const fees: Record<string, { percentage?: number; fixed?: number; min?: number; max?: number }> = {
+      'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
+      'bank-card': { percentage: 2.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
+      'kaspi': { percentage: 0 }, // Free for popular method
+      'sberbank': { percentage: 1.5 },
+      'yandex-money': { percentage: 2 },
+      'paypal': { percentage: 3.4, fixed: selectedCurrency === 'USD' ? 0.35 : 0 },
+      'apple-pay': { percentage: 2.9 },
+      'usdt': { fixed: selectedCurrency === 'USD' ? 5 : 0 }
+    };
+
+    const feeConfig = fees[methodId];
+    if (!feeConfig) return 0;
+
+    let fee = 0;
+    if (feeConfig.fixed) fee += feeConfig.fixed;
+    if (feeConfig.percentage) fee += (amount * feeConfig.percentage) / 100;
+    if (feeConfig.min && fee < feeConfig.min) fee = feeConfig.min;
+    if (feeConfig.max && fee > feeConfig.max) fee = feeConfig.max;
+
+    return fee;
+  };
+
+  const formatFeePercentage = (methodId: string) => {
+    const fees: Record<string, { percentage?: number; fixed?: number; min?: number; max?: number }> = {
+      'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
+      'bank-card': { percentage: 2.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
+      'kaspi': { percentage: 0 },
+      'sberbank': { percentage: 1.5 },
+      'yandex-money': { percentage: 2 },
+      'paypal': { percentage: 3.4, fixed: selectedCurrency === 'USD' ? 0.35 : 0 },
+      'apple-pay': { percentage: 2.9 },
+      'usdt': { fixed: selectedCurrency === 'USD' ? 5 : 0 }
+    };
+
+    const feeConfig = fees[methodId];
+    if (!feeConfig) return 'Free';
+
+    if (feeConfig.percentage === 0) return 'Free';
+    if (feeConfig.percentage && !feeConfig.fixed) return `${feeConfig.percentage}%`;
+    if (feeConfig.fixed && !feeConfig.percentage) {
+      const symbol = currentCurrency?.symbol || '';
+      return `${symbol}${feeConfig.fixed}`;
+    }
+    if (feeConfig.percentage && feeConfig.fixed) {
+      const symbol = currentCurrency?.symbol || '';
+      return `${feeConfig.percentage}% + ${symbol}${feeConfig.fixed}`;
+    }
+
+    return 'Free';
+  };
+
+  const getTransferTime = (methodId: string) => {
+    const transferTimes: Record<string, string> = {
+      'bank-transfer': '1-2 business days',
+      'bank-card': 'Instant',
+      'kaspi': 'Instant',
+      'sberbank': '2-10 minutes',
+      'yandex-money': '2-5 minutes',
+      'paypal': 'Instant',
+      'apple-pay': 'Instant',
+      'usdt': '10-30 minutes'
+    };
+    
+    return transferTimes[methodId] || 'Unknown';
+  };
+
+  const getPaymentMethodDescription = (methodId: string) => {
+    const feeDisplay = formatFeePercentage(methodId);
+    const transferTime = getTransferTime(methodId);
+    const descriptions: Record<string, string> = {
+      'bank-transfer': 'Traditional bank transfer',
+      'bank-card': 'Visa, Mastercard accepted',
+      'kaspi': 'Instant transfer via Kaspi',
+      'sberbank': 'Russia\'s largest bank',
+      'yandex-money': 'Digital wallet service',
+      'paypal': 'Secure global payments',
+      'apple-pay': 'Pay with Touch/Face ID',
+      'usdt': 'Cryptocurrency payment'
+    };
+    
+    return `${descriptions[methodId] || 'Digital payment'} • Fee: ${feeDisplay} • ${transferTime}`;
+  };
 
   const renderPaymentForm = (methodId: string) => {
     switch (methodId) {
@@ -279,14 +366,15 @@ export default function TopUpScreen() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [showCurrencyDropdown]);
 
-  // Reset expanded payment method when currency changes
+  // Reset expanded payment method and amount when currency changes
   useEffect(() => {
     setExpandedPaymentMethod(null);
+    setAmount("");
   }, [selectedCurrency]);
 
   return (
-    <div className="min-h-screen bg-white fixed inset-0 z-50 flex flex-col">
-      <div className="bg-gradient-to-b from-gray-50 to-white p-6 pb-8 border-b border-gray-200">
+    <div className="min-h-screen bg-white fixed inset-0 z-50 overflow-y-auto">
+      <div className="bg-gradient-to-b from-gray-50 to-white p-6 pb-8 border-b border-gray-200 sticky top-0 z-10">
         <div className="flex items-center mb-6">
           <button
             onClick={() => navigate(-1)}
@@ -318,7 +406,7 @@ export default function TopUpScreen() {
               </button>
 
               {showCurrencyDropdown && (
-                <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-10 min-w-48">
+                <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-20 min-w-48">
                   {currencies.map((currency) => (
                     <button
                       key={currency.code}
@@ -350,6 +438,8 @@ export default function TopUpScreen() {
             <input
               type="number"
               placeholder="0.00"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
               className="w-full text-3xl font-bold text-gray-900 bg-transparent border-none outline-none pr-12"
             />
             <span className="absolute right-0 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">
@@ -368,7 +458,7 @@ export default function TopUpScreen() {
         </div>
       </div>
 
-      <div className="flex-1 p-6 space-y-4">
+      <div className="p-6 space-y-4 pb-8">
         <h3 className="text-gray-900 font-semibold mb-4">
           Choose payment method
         </h3>
@@ -376,6 +466,9 @@ export default function TopUpScreen() {
         {availablePaymentMethods.map((method) => {
           const IconComponent = method.icon;
           const isExpanded = expandedPaymentMethod === method.id;
+          const amountNumber = parseFloat(amount) || 0;
+          const fee = calculateFee(method.id, amountNumber);
+          const description = getPaymentMethodDescription(method.id);
 
           return (
             <div
@@ -398,6 +491,13 @@ export default function TopUpScreen() {
                 <div className="flex-1 text-left">
                   <p className="text-gray-900 font-medium">{method.name}</p>
                   <p className="text-gray-600 text-sm">{method.description}</p>
+                  <p className="text-gray-500 text-xs">Fee: {formatFeePercentage(method.id)}</p>
+                  <p className="text-gray-500 text-xs">{getTransferTime(method.id)}</p>
+                  {amountNumber > 0 && (
+                    <p className="text-xs text-gray-500 mt-1 font-medium">
+                      Total: {currentCurrency?.symbol}{(amountNumber + fee).toFixed(2)}
+                    </p>
+                  )}
                 </div>
                 {method.popular && (
                   <span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">
