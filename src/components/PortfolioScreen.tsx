@@ -23,11 +23,11 @@ export default function PortfolioScreen() {
   return (
     <div className="min-h-screen p-6">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Портфель</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Portfolio</h2>
         <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
-          <p className="text-gray-600 text-xs mb-1">Общий баланс</p>
+          <p className="text-gray-600 text-xs mb-1">Total Balance</p>
           <h3 className="text-2xl font-bold text-gray-900 mb-1">₸0.00</h3>
-          <p className="text-gray-500 text-xs">Готов к инвестированию</p>
+          <p className="text-gray-500 text-xs">Ready to invest</p>
         </div>
       </div>
 
@@ -35,7 +35,7 @@ export default function PortfolioScreen() {
       <div className="mb-6">
         <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Динамика портфеля</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Portfolio Performance</h3>
             <span className="text-green-500 text-sm font-medium">+12.5%</span>
           </div>
           
@@ -99,7 +99,7 @@ export default function PortfolioScreen() {
               <Plus className="w-4 h-4 text-green-400" />
             </div>
           </button>
-          <span className="text-gray-900 font-medium text-xs">Пополнить</span>
+          <span className="text-gray-900 font-medium text-xs">Top Up</span>
         </div>
 
         <div className="flex flex-col items-center space-y-2">
@@ -108,7 +108,7 @@ export default function PortfolioScreen() {
               <ArrowUpRight className="w-4 h-4 text-[#1436ee]" />
             </div>
           </button>
-          <span className="text-gray-900 font-medium text-xs">Конвертация</span>
+          <span className="text-gray-900 font-medium text-xs">Convert</span>
         </div>
 
         <div className="flex flex-col items-center space-y-2">
@@ -117,7 +117,7 @@ export default function PortfolioScreen() {
               <ArrowDownRight className="w-4 h-4 text-red-400" />
             </div>
           </button>
-          <span className="text-gray-900 font-medium text-xs">Вывод</span>
+          <span className="text-gray-900 font-medium text-xs">Withdraw</span>
         </div>
 
         <div className="flex flex-col items-center space-y-2">
@@ -126,13 +126,13 @@ export default function PortfolioScreen() {
               <Briefcase className="w-4 h-4 text-purple-400" />
             </div>
           </button>
-          <span className="text-gray-900 font-medium text-xs">Портфель</span>
+          <span className="text-gray-900 font-medium text-xs">Portfolio</span>
         </div>
       </div>
 
       <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
-        <h3 className="text-gray-900 font-semibold mb-3">Последние операции</h3>
-        <p className="text-gray-600 text-center py-8">Нет операций</p>
+        <h3 className="text-gray-900 font-semibold mb-3">Recent Transactions</h3>
+        <p className="text-gray-600 text-center py-8">No transactions</p>
       </div>
     </div>
   );

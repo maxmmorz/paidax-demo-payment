@@ -15,30 +15,30 @@ export default function TopUpScreen() {
           >
             <ChevronLeft className="w-6 h-6 text-gray-900" />
           </button>
-          <h2 className="text-xl font-bold text-gray-900 ml-4">Пополнение счета</h2>
+          <h2 className="text-xl font-bold text-gray-900 ml-4">Top Up Account</h2>
         </div>
         
         <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
-          <p className="text-gray-600 text-sm mb-1">Сумма пополнения</p>
+          <p className="text-gray-600 text-sm mb-1">Top up amount</p>
           <input 
             type="number" 
             placeholder="0.00" 
             className="w-full text-3xl font-bold text-gray-900 bg-transparent border-none outline-none"
           />
-          <p className="text-gray-600 text-sm mt-2">Минимальная сумма: ₸1,000</p>
+          <p className="text-gray-600 text-sm mt-2">Minimum amount: ₸1,000</p>
         </div>
       </div>
 
       <div className="flex-1 p-6 space-y-4">
-        <h3 className="text-gray-900 font-semibold mb-4">Выберите способ оплаты</h3>
+        <h3 className="text-gray-900 font-semibold mb-4">Choose payment method</h3>
         
         <button className="w-full bg-white border border-gray-200 rounded-2xl p-4 flex items-center space-x-4 active:scale-[0.98] transition-transform shadow-sm">
           <div className="w-12 h-12 bg-[#1436ee]/20 rounded-full flex items-center justify-center">
             <Building2 className="w-6 h-6 text-[#1436ee]" />
           </div>
           <div className="flex-1 text-left">
-            <p className="text-gray-900 font-medium">Банковский перевод</p>
-            <p className="text-gray-600 text-sm">Прямой перевод со счета</p>
+            <p className="text-gray-900 font-medium">Bank Transfer</p>
+            <p className="text-gray-600 text-sm">Direct account transfer</p>
           </div>
         </button>
 
@@ -47,7 +47,7 @@ export default function TopUpScreen() {
             <CreditCard className="w-6 h-6 text-purple-400" />
           </div>
           <div className="flex-1 text-left">
-            <p className="text-gray-900 font-medium">Банковская карта</p>
+            <p className="text-gray-900 font-medium">Bank Card</p>
             <p className="text-gray-600 text-sm">Visa, Mastercard</p>
           </div>
         </button>
@@ -58,9 +58,9 @@ export default function TopUpScreen() {
           </div>
           <div className="flex-1 text-left">
             <p className="text-gray-900 font-medium">Kaspi.kz</p>
-            <p className="text-gray-600 text-sm">Быстрый перевод</p>
+            <p className="text-gray-600 text-sm">Quick transfer</p>
           </div>
-          <span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">Популярно</span>
+          <span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">Popular</span>
         </button>
 
         <button className="w-full bg-white border border-gray-200 rounded-2xl p-4 flex items-center space-x-4 active:scale-[0.98] transition-transform shadow-sm">
@@ -69,7 +69,7 @@ export default function TopUpScreen() {
           </div>
           <div className="flex-1 text-left">
             <p className="text-gray-900 font-medium">USDT</p>
-            <p className="text-gray-600 text-sm">Криптовалюта</p>
+            <p className="text-gray-600 text-sm">Cryptocurrency</p>
           </div>
         </button>
 
@@ -79,14 +79,14 @@ export default function TopUpScreen() {
           </div>
           <div className="flex-1 text-left">
             <p className="text-gray-900 font-medium">Apple Pay</p>
-            <p className="text-gray-600 text-sm">Быстрая оплата</p>
+            <p className="text-gray-600 text-sm">Quick payment</p>
           </div>
         </button>
       </div>
 
       <div className="p-6">
         <button className="w-full bg-gradient-to-r from-[#1436ee] to-purple-600 text-white font-semibold py-4 rounded-2xl active:scale-[0.98] transition-transform shadow-lg">
-          Продолжить
+          Continue
         </button>
       </div>
     </div>
