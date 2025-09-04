@@ -1,10 +1,9 @@
-import React from 'react';
-import { Home, ShoppingCart, Briefcase, Menu, User, Bell } from 'lucide-react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Home, ShoppingCart, Briefcase, Menu, User, Bell } from "lucide-react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 export default function Layout() {
   const location = useLocation();
-  const isTopUpScreen = location.pathname === '/topup';
+  const isTopUpScreen = location.pathname === "/topup";
 
   return (
     <div className="min-h-screen bg-background text-foreground relative">
@@ -15,14 +14,20 @@ export default function Layout() {
             <button className="p-2.5 hover:bg-muted/50 rounded-xl transition-all duration-200 active:scale-95">
               <Menu className="w-5 h-5 text-foreground/80" strokeWidth={1.5} />
             </button>
-            
+
             <div className="flex items-center space-x-1">
               <button className="p-2.5 hover:bg-muted/50 rounded-xl transition-all duration-200 active:scale-95 relative">
-                <Bell className="w-5 h-5 text-foreground/80" strokeWidth={1.5} />
+                <Bell
+                  className="w-5 h-5 text-foreground/80"
+                  strokeWidth={1.5}
+                />
                 <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-destructive rounded-full"></div>
               </button>
               <button className="p-2.5 hover:bg-muted/50 rounded-xl transition-all duration-200 active:scale-95">
-                <User className="w-5 h-5 text-foreground/80" strokeWidth={1.5} />
+                <User
+                  className="w-5 h-5 text-foreground/80"
+                  strokeWidth={1.5}
+                />
               </button>
             </div>
           </div>
@@ -38,12 +43,17 @@ export default function Layout() {
               <NavLink
                 to="/"
                 children={({ isActive }) => (
-                  <div className={`flex flex-col items-center py-3 px-6 rounded-2xl transition-all duration-200 active:scale-95 ${
-                    isActive 
-                      ? 'text-primary bg-primary/10' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
-                  }`}>
-                    <Home className="w-5 h-5 mb-1.5" strokeWidth={isActive ? 2 : 1.5} />
+                  <div
+                    className={`flex flex-col items-center py-3 px-6 rounded-2xl transition-all duration-200 active:scale-95 ${
+                      isActive
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/30"
+                    }`}
+                  >
+                    <Home
+                      className="w-5 h-5 mb-1.5"
+                      strokeWidth={isActive ? 2 : 1.5}
+                    />
                     <span className="text-xs font-medium">Home</span>
                   </div>
                 )}
@@ -52,12 +62,17 @@ export default function Layout() {
               <NavLink
                 to="/market"
                 children={({ isActive }) => (
-                  <div className={`flex flex-col items-center py-3 px-6 rounded-2xl transition-all duration-200 active:scale-95 ${
-                    isActive 
-                      ? 'text-primary bg-primary/10' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
-                  }`}>
-                    <ShoppingCart className="w-5 h-5 mb-1.5" strokeWidth={isActive ? 2 : 1.5} />
+                  <div
+                    className={`flex flex-col items-center py-3 px-6 rounded-2xl transition-all duration-200 active:scale-95 ${
+                      isActive
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/30"
+                    }`}
+                  >
+                    <ShoppingCart
+                      className="w-5 h-5 mb-1.5"
+                      strokeWidth={isActive ? 2 : 1.5}
+                    />
                     <span className="text-xs font-medium">Market</span>
                   </div>
                 )}
@@ -66,12 +81,17 @@ export default function Layout() {
               <NavLink
                 to="/portfolio"
                 children={({ isActive }) => (
-                  <div className={`flex flex-col items-center py-3 px-6 rounded-2xl transition-all duration-200 active:scale-95 ${
-                    isActive 
-                      ? 'text-primary bg-primary/10' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
-                  }`}>
-                    <Briefcase className="w-5 h-5 mb-1.5" strokeWidth={isActive ? 2 : 1.5} />
+                  <div
+                    className={`flex flex-col items-center py-3 px-6 rounded-2xl transition-all duration-200 active:scale-95 ${
+                      isActive
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/30"
+                    }`}
+                  >
+                    <Briefcase
+                      className="w-5 h-5 mb-1.5"
+                      strokeWidth={isActive ? 2 : 1.5}
+                    />
                     <span className="text-xs font-medium">Portfolio</span>
                   </div>
                 )}
