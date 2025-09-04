@@ -1,21 +1,21 @@
-import { buttonVariants } from "@/components/ui/button";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import MainScreen from './components/MainScreen';
+import MarketScreen from './components/MarketScreen';
+import PortfolioScreen from './components/PortfolioScreen';
+import TopUpScreen from './components/TopUpScreen';
 
-function App() {
+export default function PaidaxClone() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen space-y-20">
-      <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-        Vite, React, Shadcn-ui minimal starter
-      </h1>
-      <a
-        href="https://github.com/moinulmoin/vite-react-tailwind-starter"
-        target="_blank"
-        rel="noreferrer"
-        className={buttonVariants()}
-      >
-        ⭐️ on GitHub
-      </a>
-    </main>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<MainScreen />} />
+          <Route path="market" element={<MarketScreen />} />
+          <Route path="portfolio" element={<PortfolioScreen />} />
+        </Route>
+        <Route path="topup" element={<TopUpScreen />} />
+      </Routes>
+    </Router>
   );
 }
-
-export default App;
