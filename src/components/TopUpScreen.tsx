@@ -6,6 +6,7 @@ export default function TopUpScreen() {
   const navigate = useNavigate();
   const [selectedCurrency, setSelectedCurrency] = useState('KZT');
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
+  const [expandedPaymentMethod, setExpandedPaymentMethod] = useState<string | null>(null);
   
   const currencies = [
     { code: 'KZT', symbol: '₸', name: 'Kazakhstani Tenge' },
@@ -100,6 +101,135 @@ export default function TopUpScreen() {
   const availablePaymentMethods = paymentMethods.filter(method => 
     method.currencies.includes(selectedCurrency)
   );
+
+  const renderPaymentForm = (methodId: string) => {
+    switch (methodId) {
+      case 'bank-transfer':
+        return (
+          <div className="pt-4 border-t border-gray-100">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Account Number</label>
+                <input
+                  type="text"
+                  placeholder="Enter your account number"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Bank Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter bank name"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+              </div>
+              <button className="w-full bg-primary text-white font-medium py-3 rounded-xl hover:bg-primary/90 transition-colors">
+                Proceed with Bank Transfer
+              </button>
+            </div>
+          </div>
+        );
+
+      case 'bank-card':
+        return (
+          <div className="pt-4 border-t border-gray-100">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
+                <input
+                  type="text"
+                  placeholder="1234 5678 9012 3456"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Expiry</label>
+                  <input
+                    type="text"
+                    placeholder="MM/YY"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">CVV</label>
+                  <input
+                    type="text"
+                    placeholder="123"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+              </div>
+              <button className="w-full bg-primary text-white font-medium py-3 rounded-xl hover:bg-primary/90 transition-colors">
+                Pay with Card
+              </button>
+            </div>
+          </div>
+        );
+
+      case 'kaspi':
+        return (
+          <div className="pt-4 border-t border-gray-100">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                <input
+                  type="tel"
+                  placeholder="+7 (777) 123-45-67"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+              </div>
+              <div className="bg-green-50 p-3 rounded-xl">
+                <p className="text-sm text-green-700">You will receive a push notification in your Kaspi app to confirm the payment.</p>
+              </div>
+              <button className="w-full bg-primary text-white font-medium py-3 rounded-xl hover:bg-primary/90 transition-colors">
+                Pay with Kaspi
+              </button>
+            </div>
+          </div>
+        );
+
+      case 'paypal':
+        return (
+          <div className="pt-4 border-t border-gray-100">
+            <div className="space-y-4">
+              <div className="bg-blue-50 p-3 rounded-xl">
+                <p className="text-sm text-blue-700">You will be redirected to PayPal to complete your payment securely.</p>
+              </div>
+              <button className="w-full bg-blue-500 text-white font-medium py-3 rounded-xl hover:bg-blue-600 transition-colors">
+                Continue with PayPal
+              </button>
+            </div>
+          </div>
+        );
+
+      case 'apple-pay':
+        return (
+          <div className="pt-4 border-t border-gray-100">
+            <div className="space-y-4">
+              <div className="bg-gray-50 p-3 rounded-xl">
+                <p className="text-sm text-gray-700">Use Touch ID or Face ID to complete your payment with Apple Pay.</p>
+              </div>
+              <button className="w-full bg-gray-900 text-white font-medium py-3 rounded-xl hover:bg-gray-800 transition-colors">
+                Pay with Apple Pay
+              </button>
+            </div>
+          </div>
+        );
+
+      default:
+        return (
+          <div className="pt-4 border-t border-gray-100">
+            <div className="space-y-4">
+              <div className="bg-gray-50 p-3 rounded-xl">
+                <p className="text-sm text-gray-700">Payment form for {methodId} will be available soon.</p>
+              </div>
+            </div>
+          </div>
+        );
+    }
+  };
   
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -111,6 +241,11 @@ export default function TopUpScreen() {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [showCurrencyDropdown]);
+
+  // Reset expanded payment method when currency changes
+  useEffect(() => {
+    setExpandedPaymentMethod(null);
+  }, [selectedCurrency]);
 
   return (
     <div className="min-h-screen bg-white fixed inset-0 z-50 flex flex-col">
@@ -180,22 +315,44 @@ export default function TopUpScreen() {
         
         {availablePaymentMethods.map((method) => {
           const IconComponent = method.icon;
+          const isExpanded = expandedPaymentMethod === method.id;
+          
           return (
-            <button
+            <div
               key={method.id}
-              className="w-full bg-white border border-gray-200 rounded-2xl p-4 flex items-center space-x-4 active:scale-[0.98] transition-transform shadow-sm"
+              className={`w-full bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden transition-all duration-300 ${
+                isExpanded ? 'border-primary/50' : ''
+              }`}
             >
-              <div className={`w-12 h-12 ${method.bgColor} rounded-full flex items-center justify-center`}>
-                <IconComponent className={`w-6 h-6 ${method.iconColor}`} />
-              </div>
-              <div className="flex-1 text-left">
-                <p className="text-gray-900 font-medium">{method.name}</p>
-                <p className="text-gray-600 text-sm">{method.description}</p>
-              </div>
-              {method.popular && (
-                <span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">Popular</span>
+              <button
+                onClick={() => {
+                  setExpandedPaymentMethod(isExpanded ? null : method.id);
+                }}
+                className="w-full p-4 flex items-center space-x-4 active:scale-[0.98] transition-transform"
+              >
+                <div className={`w-12 h-12 ${method.bgColor} rounded-full flex items-center justify-center`}>
+                  <IconComponent className={`w-6 h-6 ${method.iconColor}`} />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-gray-900 font-medium">{method.name}</p>
+                  <p className="text-gray-600 text-sm">{method.description}</p>
+                </div>
+                {method.popular && (
+                  <span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">Popular</span>
+                )}
+                <ChevronDown 
+                  className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                    isExpanded ? 'rotate-180' : ''
+                  }`} 
+                />
+              </button>
+              
+              {isExpanded && (
+                <div className="px-4 pb-4">
+                  {renderPaymentForm(method.id)}
+                </div>
               )}
-            </button>
+            </div>
           );
         })}
       </div>
