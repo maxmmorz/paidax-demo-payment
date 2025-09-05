@@ -6,8 +6,9 @@ import {
   CreditCard,
   Wallet,
   Bitcoin,
-  Apple,
   Banknote,
+  Coins,
+  DollarSign,
   Plus,
   Check,
   X,
@@ -23,7 +24,7 @@ interface SavedCard {
   holderName: string;
 }
 
-export default function TopUpScreen() {
+export default function WithdrawScreen() {
   const navigate = useNavigate();
   const [selectedCurrency, setSelectedCurrency] = useState("KZT");
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
@@ -65,7 +66,7 @@ export default function TopUpScreen() {
     {
       id: "bank-transfer",
       name: "Bank Transfer",
-      description: "Traditional bank transfer",
+      description: "Withdraw to your bank account",
       icon: Building2,
       bgColor: "bg-[#1436ee]/20",
       iconColor: "text-[#1436ee]",
@@ -75,7 +76,7 @@ export default function TopUpScreen() {
     {
       id: "bank-card",
       name: "Bank Card",
-      description: "Visa, Mastercard accepted",
+      description: "Direct withdrawal to card",
       icon: CreditCard,
       bgColor: "bg-purple-500/20",
       iconColor: "text-purple-400",
@@ -85,7 +86,7 @@ export default function TopUpScreen() {
     {
       id: "kaspi",
       name: "Kaspi.kz",
-      description: "Instant transfer via Kaspi",
+      description: "Instant withdrawal via Kaspi",
       icon: Wallet,
       bgColor: "bg-green-500/20",
       iconColor: "text-green-400",
@@ -105,7 +106,7 @@ export default function TopUpScreen() {
     {
       id: "yandex-money",
       name: "YooMoney",
-      description: "Digital wallet service",
+      description: "Digital wallet withdrawal",
       icon: Wallet,
       bgColor: "bg-yellow-500/20",
       iconColor: "text-yellow-600",
@@ -115,7 +116,7 @@ export default function TopUpScreen() {
     {
       id: "paypal",
       name: "PayPal",
-      description: "Secure global payments",
+      description: "Secure global withdrawals",
       icon: Wallet,
       bgColor: "bg-blue-500/20",
       iconColor: "text-blue-500",
@@ -123,24 +124,34 @@ export default function TopUpScreen() {
       popular: true,
     },
     {
-      id: "apple-pay",
-      name: "Apple Pay",
-      description: "Pay with Touch/Face ID",
-      icon: Apple,
-      bgColor: "bg-gray-700",
-      iconColor: "text-white",
-      currencies: ["KZT", "USD", "RUB"],
+      id: "bitcoin",
+      name: "Bitcoin (BTC)",
+      description: "Bitcoin network withdrawal",
+      icon: Bitcoin,
+      bgColor: "bg-orange-500/20",
+      iconColor: "text-orange-500",
+      currencies: ["USD"],
+      popular: true,
+    },
+    {
+      id: "ethereum",
+      name: "Ethereum (ETH)",
+      description: "Ethereum network withdrawal",
+      icon: Coins,
+      bgColor: "bg-blue-600/20",
+      iconColor: "text-blue-600",
+      currencies: ["USD"],
       popular: true,
     },
     {
       id: "usdt",
       name: "USDT",
-      description: "Cryptocurrency payment",
-      icon: Bitcoin,
-      bgColor: "bg-yellow-500/20",
-      iconColor: "text-yellow-400",
+      description: "Tether stablecoin withdrawal",
+      icon: DollarSign,
+      bgColor: "bg-green-600/20",
+      iconColor: "text-green-600",
       currencies: ["USD"],
-      popular: false,
+      popular: true,
     },
   ];
 
@@ -149,17 +160,18 @@ export default function TopUpScreen() {
     method.currencies.includes(selectedCurrency)
   );
 
-  // Fee calculation logic
+  // Fee calculation logic for withdrawals
   const calculateFee = (methodId: string, amount: number) => {
     const fees: Record<string, { percentage?: number; fixed?: number; min?: number; max?: number }> = {
       'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
-      'bank-card': { percentage: 2.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
+      'bank-card': { percentage: 1.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
       'kaspi': { percentage: 0 }, // Free for popular method
-      'sberbank': { percentage: 1.5 },
-      'yandex-money': { percentage: 2 },
-      'paypal': { percentage: 3.4, fixed: selectedCurrency === 'USD' ? 0.35 : 0 },
-      'apple-pay': { percentage: 2.9 },
-      'usdt': { fixed: selectedCurrency === 'USD' ? 5 : 0 }
+      'sberbank': { percentage: 1 },
+      'yandex-money': { percentage: 1.5 },
+      'paypal': { percentage: 2.9, fixed: selectedCurrency === 'USD' ? 0.30 : 0 },
+      'bitcoin': { fixed: selectedCurrency === 'USD' ? 15 : 0 }, // Network fee
+      'ethereum': { fixed: selectedCurrency === 'USD' ? 8 : 0 }, // Gas fee
+      'usdt': { fixed: selectedCurrency === 'USD' ? 3 : 0 } // Tether network fee
     };
 
     const feeConfig = fees[methodId];
@@ -177,13 +189,14 @@ export default function TopUpScreen() {
   const formatFeePercentage = (methodId: string) => {
     const fees: Record<string, { percentage?: number; fixed?: number; min?: number; max?: number }> = {
       'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
-      'bank-card': { percentage: 2.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
+      'bank-card': { percentage: 1.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
       'kaspi': { percentage: 0 },
-      'sberbank': { percentage: 1.5 },
-      'yandex-money': { percentage: 2 },
-      'paypal': { percentage: 3.4, fixed: selectedCurrency === 'USD' ? 0.35 : 0 },
-      'apple-pay': { percentage: 2.9 },
-      'usdt': { fixed: selectedCurrency === 'USD' ? 5 : 0 }
+      'sberbank': { percentage: 1 },
+      'yandex-money': { percentage: 1.5 },
+      'paypal': { percentage: 2.9, fixed: selectedCurrency === 'USD' ? 0.30 : 0 },
+      'bitcoin': { fixed: selectedCurrency === 'USD' ? 15 : 0 },
+      'ethereum': { fixed: selectedCurrency === 'USD' ? 8 : 0 },
+      'usdt': { fixed: selectedCurrency === 'USD' ? 3 : 0 }
     };
 
     const feeConfig = fees[methodId];
@@ -211,8 +224,9 @@ export default function TopUpScreen() {
       'sberbank': '2-10 minutes',
       'yandex-money': '2-5 minutes',
       'paypal': 'Instant',
-      'apple-pay': 'Instant',
-      'usdt': '10-30 minutes'
+      'bitcoin': '10-60 minutes',
+      'ethereum': '2-15 minutes',
+      'usdt': '2-30 minutes'
     };
     
     return transferTimes[methodId] || 'Unknown';
@@ -371,13 +385,13 @@ export default function TopUpScreen() {
                   <div className="flex items-center space-x-2">
                     <input
                       type="checkbox"
-                      id="save-card"
+                      id="save-card-withdraw"
                       checked={saveCard}
                       onChange={(e) => setSaveCard(e.target.checked)}
                       className="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded"
                     />
-                    <label htmlFor="save-card" className="text-sm text-gray-700">
-                      Save this card for future payments
+                    <label htmlFor="save-card-withdraw" className="text-sm text-gray-700">
+                      Save this card for future withdrawals
                     </label>
                   </div>
                 </div>
@@ -401,7 +415,7 @@ export default function TopUpScreen() {
               )}
 
               <button className="w-full bg-primary text-white font-medium py-3 rounded-xl hover:bg-primary/90 transition-colors">
-                {selectedSavedCard ? "Pay with Saved Card" : "Pay with Card"}
+                {selectedSavedCard ? "Withdraw to Saved Card" : "Withdraw to Card"}
               </button>
             </div>
           </div>
@@ -424,11 +438,11 @@ export default function TopUpScreen() {
               <div className="bg-green-50 p-3 rounded-xl">
                 <p className="text-sm text-green-700">
                   You will receive a push notification in your Kaspi app to
-                  confirm the payment.
+                  confirm the withdrawal.
                 </p>
               </div>
               <button className="w-full bg-primary text-white font-medium py-3 rounded-xl hover:bg-primary/90 transition-colors">
-                Pay with Kaspi
+                Withdraw with Kaspi
               </button>
             </div>
           </div>
@@ -438,44 +452,157 @@ export default function TopUpScreen() {
         return (
           <div className="pt-4 border-t border-gray-100">
             <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  PayPal Email
+                </label>
+                <input
+                  type="email"
+                  placeholder="your.email@example.com"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+              </div>
               <div className="bg-blue-50 p-3 rounded-xl">
                 <p className="text-sm text-blue-700">
-                  You will be redirected to PayPal to complete your payment
-                  securely.
+                  Funds will be transferred to your PayPal account securely.
                 </p>
               </div>
               <button className="w-full bg-blue-500 text-white font-medium py-3 rounded-xl hover:bg-blue-600 transition-colors">
-                Continue with PayPal
+                Withdraw to PayPal
               </button>
             </div>
           </div>
         );
 
-      case "apple-pay":
+      case "bitcoin":
         return (
           <div className="pt-4 border-t border-gray-100">
             <div className="space-y-4">
-              <div className="bg-gray-50 p-3 rounded-xl">
-                <p className="text-sm text-gray-700">
-                  Use Touch ID or Face ID to complete your payment with Apple Pay.
-                  {selectedCurrency === 'KZT' && ' Apple Pay now supports KZT payments in Kazakhstan.'}
-                </p>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Bitcoin Wallet Address
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter your Bitcoin address (starts with 1, 3, or bc1)"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
               </div>
-              <div className="bg-blue-50 p-3 rounded-xl">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <p className="text-sm text-blue-700">
-                    Instant payment • 2.9% processing fee • Secure biometric authentication
-                  </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Network Fee
+                  </label>
+                  <select className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="standard">Standard (~30 min) - $15</option>
+                    <option value="fast">Fast (~15 min) - $25</option>
+                    <option value="instant">Priority (~5 min) - $40</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Confirmations
+                  </label>
+                  <div className="px-4 py-3 bg-gray-50 rounded-xl text-gray-600">
+                    3 confirmations
+                  </div>
                 </div>
               </div>
-              <button className="w-full bg-gray-900 text-white font-medium py-3 rounded-xl hover:bg-gray-800 transition-colors flex items-center justify-center space-x-2">
-                <Apple className="w-5 h-5" />
-                <span>Pay with Apple Pay</span>
+              <div className="bg-orange-50 p-3 rounded-xl">
+                <p className="text-sm text-orange-700">
+                  <strong>Warning:</strong> Bitcoin transactions are irreversible. Double-check your address before confirming.
+                </p>
+              </div>
+              <button className="w-full bg-orange-500 text-white font-medium py-3 rounded-xl hover:bg-orange-600 transition-colors">
+                Withdraw Bitcoin
               </button>
             </div>
           </div>
         );
+
+      case "ethereum":
+        return (
+          <div className="pt-4 border-t border-gray-100">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Ethereum Wallet Address
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter your Ethereum address (0x...)"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Gas Fee
+                  </label>
+                  <select className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="slow">Slow (5-15 min) - $8</option>
+                    <option value="standard">Standard (2-5 min) - $12</option>
+                    <option value="fast">Fast (~1 min) - $20</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Network
+                  </label>
+                  <div className="px-4 py-3 bg-gray-50 rounded-xl text-gray-600">
+                    Ethereum Mainnet
+                  </div>
+                </div>
+              </div>
+              <div className="bg-blue-50 p-3 rounded-xl">
+                <p className="text-sm text-blue-700">
+                  Make sure your wallet supports ETH on Ethereum mainnet. Gas fees vary with network congestion.
+                </p>
+              </div>
+              <button className="w-full bg-blue-600 text-white font-medium py-3 rounded-xl hover:bg-blue-700 transition-colors">
+                Withdraw Ethereum
+              </button>
+            </div>
+          </div>
+        );
+
+      case "usdt":
+        return (
+          <div className="pt-4 border-t border-gray-100">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  USDT Wallet Address
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter your wallet address"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Network
+                </label>
+                <select className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent">
+                  <option value="trc20">TRC20 (Tron) - $1 fee</option>
+                  <option value="erc20">ERC20 (Ethereum) - $8 fee</option>
+                  <option value="bep20">BEP20 (BSC) - $1 fee</option>
+                  <option value="polygon">Polygon - $0.01 fee</option>
+                </select>
+              </div>
+              <div className="bg-green-50 p-3 rounded-xl">
+                <p className="text-sm text-green-700">
+                  <strong>Recommended:</strong> TRC20 network for lowest fees and fast transfers.
+                </p>
+              </div>
+              <button className="w-full bg-green-600 text-white font-medium py-3 rounded-xl hover:bg-green-700 transition-colors">
+                Withdraw USDT
+              </button>
+            </div>
+          </div>
+        );
+
 
       default:
         return (
@@ -483,7 +610,7 @@ export default function TopUpScreen() {
             <div className="space-y-4">
               <div className="bg-gray-50 p-3 rounded-xl">
                 <p className="text-sm text-gray-700">
-                  Payment form for {methodId} will be available soon.
+                  Withdrawal form for {methodId} will be available soon.
                 </p>
               </div>
             </div>
@@ -523,13 +650,13 @@ export default function TopUpScreen() {
             <ChevronLeft className="w-6 h-6 text-gray-900" />
           </button>
           <h2 className="text-xl font-bold text-gray-900 ml-4">
-            Top Up Account
+            Withdraw Funds
           </h2>
         </div>
 
         <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-gray-600 text-sm">Top up amount</p>
+            <p className="text-gray-600 text-sm">Withdrawal amount</p>
             <div className="relative currency-dropdown">
               <button
                 onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
@@ -587,20 +714,30 @@ export default function TopUpScreen() {
             </span>
           </div>
 
-          <p className="text-gray-600 text-sm mt-2">
-            Minimum amount: {currentCurrency?.symbol}
-            {selectedCurrency === "KZT"
-              ? "1,000"
-              : selectedCurrency === "RUB"
-              ? "500"
-              : "10"}
-          </p>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-gray-600 text-sm">
+              Minimum amount: {currentCurrency?.symbol}
+              {selectedCurrency === "KZT"
+                ? "2,000"
+                : selectedCurrency === "RUB"
+                ? "1,000"
+                : "25"}
+            </p>
+            <p className="text-gray-600 text-sm">
+              Available: {currentCurrency?.symbol}
+              {selectedCurrency === "KZT"
+                ? "125,430"
+                : selectedCurrency === "RUB"
+                ? "84,250"
+                : "1,520"}
+            </p>
+          </div>
         </div>
       </div>
 
       <div className="p-6 space-y-4 pb-8">
         <h3 className="text-gray-900 font-semibold mb-4">
-          Choose payment method
+          Choose withdrawal method
         </h3>
 
         {availablePaymentMethods.map((method) => {
@@ -634,7 +771,7 @@ export default function TopUpScreen() {
                   <p className="text-gray-500 text-xs">{getTransferTime(method.id)}</p>
                   {amountNumber > 0 && (
                     <p className="text-xs text-gray-500 mt-1 font-medium">
-                      Total: {currentCurrency?.symbol}{(amountNumber + fee).toFixed(2)}
+                      You'll receive: {currentCurrency?.symbol}{(amountNumber - fee).toFixed(2)}
                     </p>
                   )}
                 </div>

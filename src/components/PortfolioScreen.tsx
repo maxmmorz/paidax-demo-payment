@@ -132,7 +132,9 @@ export default function PortfolioScreen() {
         </div>
 
         <div className="flex flex-col items-center space-y-2">
-          <button className="w-12 h-12 bg-white border border-gray-200 rounded-xl flex items-center justify-center active:scale-95 transition-transform shadow-sm">
+          <button 
+            onClick={() => navigate("/withdraw")}
+            className="w-12 h-12 bg-white border border-gray-200 rounded-xl flex items-center justify-center active:scale-95 transition-transform shadow-sm">
             <div className="w-8 h-8 bg-red-500/20 rounded-full flex items-center justify-center">
               <ArrowDownRight className="w-4 h-4 text-red-400" />
             </div>

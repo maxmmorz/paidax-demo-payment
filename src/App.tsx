@@ -4,6 +4,7 @@ import MainScreen from "./components/MainScreen";
 import MarketScreen from "./components/MarketScreen";
 import PortfolioScreen from "./components/PortfolioScreen";
 import TopUpScreen from "./components/TopUpScreen";
+import WithdrawScreen from "./components/WithdrawScreen";
 
 export default function PaidaxClone() {
   return (
@@ -15,6 +16,7 @@ export default function PaidaxClone() {
           <Route path="portfolio" element={<PortfolioScreen />} />
         </Route>
         <Route path="topup" element={<TopUpScreen />} />
+        <Route path="withdraw" element={<WithdrawScreen />} />
       </Routes>
     </Router>
   );
