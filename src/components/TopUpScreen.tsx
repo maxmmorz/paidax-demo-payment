@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
 import {
-  ChevronLeft,
   ChevronDown,
   Building2,
   CreditCard,
   Wallet,
   Bitcoin,
   Apple,
-  Banknote,
   Plus,
   Check,
   X,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 interface SavedCard {
   id: string;
@@ -24,7 +21,6 @@ interface SavedCard {
 }
 
 export default function TopUpScreen() {
-  const navigate = useNavigate();
   const [selectedCurrency, setSelectedCurrency] = useState("KZT");
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [expandedPaymentMethod, setExpandedPaymentMethod] = useState<
@@ -93,36 +89,6 @@ export default function TopUpScreen() {
       popular: true,
     },
     {
-      id: "sberbank",
-      name: "Sberbank",
-      description: "Russia's largest bank",
-      icon: Banknote,
-      bgColor: "bg-green-600/20",
-      iconColor: "text-green-600",
-      currencies: ["RUB"],
-      popular: true,
-    },
-    {
-      id: "yandex-money",
-      name: "YooMoney",
-      description: "Digital wallet service",
-      icon: Wallet,
-      bgColor: "bg-yellow-500/20",
-      iconColor: "text-yellow-600",
-      currencies: ["RUB"],
-      popular: false,
-    },
-    {
-      id: "paypal",
-      name: "PayPal",
-      description: "Secure global payments",
-      icon: Wallet,
-      bgColor: "bg-blue-500/20",
-      iconColor: "text-blue-500",
-      currencies: ["USD"],
-      popular: true,
-    },
-    {
       id: "apple-pay",
       name: "Apple Pay",
       description: "Pay with Touch/Face ID",
@@ -155,9 +121,6 @@ export default function TopUpScreen() {
       'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
       'bank-card': { percentage: 2.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
       'kaspi': { percentage: 0 }, // Free for popular method
-      'sberbank': { percentage: 1.5 },
-      'yandex-money': { percentage: 2 },
-      'paypal': { percentage: 3.4, fixed: selectedCurrency === 'USD' ? 0.35 : 0 },
       'apple-pay': { percentage: 2.9 },
       'usdt': { fixed: selectedCurrency === 'USD' ? 5 : 0 }
     };
@@ -179,9 +142,6 @@ export default function TopUpScreen() {
       'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
       'bank-card': { percentage: 2.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
       'kaspi': { percentage: 0 },
-      'sberbank': { percentage: 1.5 },
-      'yandex-money': { percentage: 2 },
-      'paypal': { percentage: 3.4, fixed: selectedCurrency === 'USD' ? 0.35 : 0 },
       'apple-pay': { percentage: 2.9 },
       'usdt': { fixed: selectedCurrency === 'USD' ? 5 : 0 }
     };
@@ -208,9 +168,6 @@ export default function TopUpScreen() {
       'bank-transfer': '1-2 business days',
       'bank-card': 'Instant',
       'kaspi': 'Instant',
-      'sberbank': '2-10 minutes',
-      'yandex-money': '2-5 minutes',
-      'paypal': 'Instant',
       'apple-pay': 'Instant',
       'usdt': '10-30 minutes'
     };
@@ -434,22 +391,6 @@ export default function TopUpScreen() {
           </div>
         );
 
-      case "paypal":
-        return (
-          <div className="pt-4 border-t border-gray-100">
-            <div className="space-y-4">
-              <div className="bg-blue-50 p-3 rounded-xl">
-                <p className="text-sm text-blue-700">
-                  You will be redirected to PayPal to complete your payment
-                  securely.
-                </p>
-              </div>
-              <button className="w-full bg-blue-500 text-white font-medium py-3 rounded-xl hover:bg-blue-600 transition-colors">
-                Continue with PayPal
-              </button>
-            </div>
-          </div>
-        );
 
       case "apple-pay":
         return (
@@ -514,19 +455,7 @@ export default function TopUpScreen() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-gradient-to-b from-gray-50 to-white p-6 pb-8 border-b border-gray-200 sticky top-0 z-10">
-        <div className="flex items-center mb-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center active:scale-95 transition-transform"
-          >
-            <ChevronLeft className="w-6 h-6 text-gray-900" />
-          </button>
-          <h2 className="text-xl font-bold text-gray-900 ml-4">
-            Top Up Account
-          </h2>
-        </div>
-
+      <div className="bg-gradient-to-b from-gray-50 to-white p-6 pb-8 border-b border-gray-200">
         <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <p className="text-gray-600 text-sm">Top up amount</p>

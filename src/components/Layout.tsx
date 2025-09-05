@@ -1,10 +1,12 @@
-import { Home, ShoppingCart, Briefcase, Menu, User, Bell } from "lucide-react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { Home, ShoppingCart, Briefcase, Menu, User, Bell, ArrowLeft } from "lucide-react";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 export default function Layout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isTopUpScreen = location.pathname === "/topup";
   const isWithdrawScreen = location.pathname === "/withdraw";
+  const isModalScreen = isTopUpScreen || isWithdrawScreen;
 
   return (
     <div className="min-h-screen bg-background text-foreground relative">
@@ -12,9 +14,23 @@ export default function Layout() {
         {/* Top Bar - Apple-style header */}
         <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
           <div className="flex items-center justify-between px-5 py-4">
-            <button className="p-2.5 hover:bg-muted/50 rounded-xl transition-all duration-200 active:scale-95">
-              <Menu className="w-5 h-5 text-foreground/80" strokeWidth={1.5} />
-            </button>
+            {isModalScreen ? (
+              <div className="flex items-center">
+                <button 
+                  onClick={() => navigate(-1)}
+                  className="p-2.5 hover:bg-muted/50 rounded-xl transition-all duration-200 active:scale-95"
+                >
+                  <ArrowLeft className="w-5 h-5 text-foreground/80" strokeWidth={1.5} />
+                </button>
+                <h1 className="ml-3 text-lg font-semibold text-foreground">
+                  {isTopUpScreen ? "Top Up Account" : "Withdraw Funds"}
+                </h1>
+              </div>
+            ) : (
+              <button className="p-2.5 hover:bg-muted/50 rounded-xl transition-all duration-200 active:scale-95">
+                <Menu className="w-5 h-5 text-foreground/80" strokeWidth={1.5} />
+              </button>
+            )}
 
             <div className="flex items-center space-x-1">
               <button className="p-2.5 hover:bg-muted/50 rounded-xl transition-all duration-200 active:scale-95 relative">
@@ -34,11 +50,11 @@ export default function Layout() {
           </div>
         </div>
 
-        <div className="flex-1 pb-20">
+        <div className={`flex-1 ${isModalScreen ? "pb-8" : "pb-20"}`}>
           <Outlet />
         </div>
 
-        {!isTopUpScreen && !isWithdrawScreen && (
+        {!isModalScreen && (
           <div className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-xl border-t border-border/30">
             <div className="max-w-md mx-auto flex justify-around py-2 safe-area-inset-bottom">
               <NavLink

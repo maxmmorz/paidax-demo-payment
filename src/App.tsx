@@ -14,9 +14,9 @@ export default function PaidaxClone() {
           <Route index element={<MainScreen />} />
           <Route path="market" element={<MarketScreen />} />
           <Route path="portfolio" element={<PortfolioScreen />} />
+          <Route path="topup" element={<TopUpScreen />} />
+          <Route path="withdraw" element={<WithdrawScreen />} />
         </Route>
-        <Route path="topup" element={<TopUpScreen />} />
-        <Route path="withdraw" element={<WithdrawScreen />} />
       </Routes>
     </Router>
   );

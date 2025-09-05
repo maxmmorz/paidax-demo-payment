@@ -1,19 +1,13 @@
 import { useState, useEffect } from "react";
 import {
-  ChevronLeft,
   ChevronDown,
   Building2,
   CreditCard,
-  Wallet,
-  Bitcoin,
-  Banknote,
-  Coins,
   DollarSign,
   Plus,
   Check,
   X,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 interface SavedCard {
   id: string;
@@ -25,7 +19,6 @@ interface SavedCard {
 }
 
 export default function WithdrawScreen() {
-  const navigate = useNavigate();
   const [selectedCurrency, setSelectedCurrency] = useState("KZT");
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [expandedPaymentMethod, setExpandedPaymentMethod] = useState<
@@ -84,66 +77,6 @@ export default function WithdrawScreen() {
       popular: false,
     },
     {
-      id: "kaspi",
-      name: "Kaspi.kz",
-      description: "Instant withdrawal via Kaspi",
-      icon: Wallet,
-      bgColor: "bg-green-500/20",
-      iconColor: "text-green-400",
-      currencies: ["KZT"],
-      popular: true,
-    },
-    {
-      id: "sberbank",
-      name: "Sberbank",
-      description: "Russia's largest bank",
-      icon: Banknote,
-      bgColor: "bg-green-600/20",
-      iconColor: "text-green-600",
-      currencies: ["RUB"],
-      popular: true,
-    },
-    {
-      id: "yandex-money",
-      name: "YooMoney",
-      description: "Digital wallet withdrawal",
-      icon: Wallet,
-      bgColor: "bg-yellow-500/20",
-      iconColor: "text-yellow-600",
-      currencies: ["RUB"],
-      popular: false,
-    },
-    {
-      id: "paypal",
-      name: "PayPal",
-      description: "Secure global withdrawals",
-      icon: Wallet,
-      bgColor: "bg-blue-500/20",
-      iconColor: "text-blue-500",
-      currencies: ["USD"],
-      popular: true,
-    },
-    {
-      id: "bitcoin",
-      name: "Bitcoin (BTC)",
-      description: "Bitcoin network withdrawal",
-      icon: Bitcoin,
-      bgColor: "bg-orange-500/20",
-      iconColor: "text-orange-500",
-      currencies: ["USD"],
-      popular: true,
-    },
-    {
-      id: "ethereum",
-      name: "Ethereum (ETH)",
-      description: "Ethereum network withdrawal",
-      icon: Coins,
-      bgColor: "bg-blue-600/20",
-      iconColor: "text-blue-600",
-      currencies: ["USD"],
-      popular: true,
-    },
-    {
       id: "usdt",
       name: "USDT",
       description: "Tether stablecoin withdrawal",
@@ -165,12 +98,6 @@ export default function WithdrawScreen() {
     const fees: Record<string, { percentage?: number; fixed?: number; min?: number; max?: number }> = {
       'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
       'bank-card': { percentage: 1.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
-      'kaspi': { percentage: 0 }, // Free for popular method
-      'sberbank': { percentage: 1 },
-      'yandex-money': { percentage: 1.5 },
-      'paypal': { percentage: 2.9, fixed: selectedCurrency === 'USD' ? 0.30 : 0 },
-      'bitcoin': { fixed: selectedCurrency === 'USD' ? 15 : 0 }, // Network fee
-      'ethereum': { fixed: selectedCurrency === 'USD' ? 8 : 0 }, // Gas fee
       'usdt': { fixed: selectedCurrency === 'USD' ? 3 : 0 } // Tether network fee
     };
 
@@ -190,12 +117,6 @@ export default function WithdrawScreen() {
     const fees: Record<string, { percentage?: number; fixed?: number; min?: number; max?: number }> = {
       'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
       'bank-card': { percentage: 1.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
-      'kaspi': { percentage: 0 },
-      'sberbank': { percentage: 1 },
-      'yandex-money': { percentage: 1.5 },
-      'paypal': { percentage: 2.9, fixed: selectedCurrency === 'USD' ? 0.30 : 0 },
-      'bitcoin': { fixed: selectedCurrency === 'USD' ? 15 : 0 },
-      'ethereum': { fixed: selectedCurrency === 'USD' ? 8 : 0 },
       'usdt': { fixed: selectedCurrency === 'USD' ? 3 : 0 }
     };
 
@@ -220,12 +141,6 @@ export default function WithdrawScreen() {
     const transferTimes: Record<string, string> = {
       'bank-transfer': '1-2 business days',
       'bank-card': 'Instant',
-      'kaspi': 'Instant',
-      'sberbank': '2-10 minutes',
-      'yandex-money': '2-5 minutes',
-      'paypal': 'Instant',
-      'bitcoin': '10-60 minutes',
-      'ethereum': '2-15 minutes',
       'usdt': '2-30 minutes'
     };
     
@@ -421,150 +336,7 @@ export default function WithdrawScreen() {
           </div>
         );
 
-      case "kaspi":
-        return (
-          <div className="pt-4 border-t border-gray-100">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  placeholder="+7 (777) 123-45-67"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-              </div>
-              <div className="bg-green-50 p-3 rounded-xl">
-                <p className="text-sm text-green-700">
-                  You will receive a push notification in your Kaspi app to
-                  confirm the withdrawal.
-                </p>
-              </div>
-              <button className="w-full bg-primary text-white font-medium py-3 rounded-xl hover:bg-primary/90 transition-colors">
-                Withdraw with Kaspi
-              </button>
-            </div>
-          </div>
-        );
 
-      case "paypal":
-        return (
-          <div className="pt-4 border-t border-gray-100">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  PayPal Email
-                </label>
-                <input
-                  type="email"
-                  placeholder="your.email@example.com"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-              </div>
-              <div className="bg-blue-50 p-3 rounded-xl">
-                <p className="text-sm text-blue-700">
-                  Funds will be transferred to your PayPal account securely.
-                </p>
-              </div>
-              <button className="w-full bg-blue-500 text-white font-medium py-3 rounded-xl hover:bg-blue-600 transition-colors">
-                Withdraw to PayPal
-              </button>
-            </div>
-          </div>
-        );
-
-      case "bitcoin":
-        return (
-          <div className="pt-4 border-t border-gray-100">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bitcoin Wallet Address
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter your Bitcoin address (starts with 1, 3, or bc1)"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Network Fee
-                  </label>
-                  <select className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent">
-                    <option value="standard">Standard (~30 min) - $15</option>
-                    <option value="fast">Fast (~15 min) - $25</option>
-                    <option value="instant">Priority (~5 min) - $40</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Confirmations
-                  </label>
-                  <div className="px-4 py-3 bg-gray-50 rounded-xl text-gray-600">
-                    3 confirmations
-                  </div>
-                </div>
-              </div>
-              <div className="bg-orange-50 p-3 rounded-xl">
-                <p className="text-sm text-orange-700">
-                  <strong>Warning:</strong> Bitcoin transactions are irreversible. Double-check your address before confirming.
-                </p>
-              </div>
-              <button className="w-full bg-orange-500 text-white font-medium py-3 rounded-xl hover:bg-orange-600 transition-colors">
-                Withdraw Bitcoin
-              </button>
-            </div>
-          </div>
-        );
-
-      case "ethereum":
-        return (
-          <div className="pt-4 border-t border-gray-100">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Ethereum Wallet Address
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter your Ethereum address (0x...)"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Gas Fee
-                  </label>
-                  <select className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent">
-                    <option value="slow">Slow (5-15 min) - $8</option>
-                    <option value="standard">Standard (2-5 min) - $12</option>
-                    <option value="fast">Fast (~1 min) - $20</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Network
-                  </label>
-                  <div className="px-4 py-3 bg-gray-50 rounded-xl text-gray-600">
-                    Ethereum Mainnet
-                  </div>
-                </div>
-              </div>
-              <div className="bg-blue-50 p-3 rounded-xl">
-                <p className="text-sm text-blue-700">
-                  Make sure your wallet supports ETH on Ethereum mainnet. Gas fees vary with network congestion.
-                </p>
-              </div>
-              <button className="w-full bg-blue-600 text-white font-medium py-3 rounded-xl hover:bg-blue-700 transition-colors">
-                Withdraw Ethereum
-              </button>
-            </div>
-          </div>
-        );
 
       case "usdt":
         return (
@@ -641,19 +413,7 @@ export default function WithdrawScreen() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-gradient-to-b from-gray-50 to-white p-6 pb-8 border-b border-gray-200 sticky top-0 z-10">
-        <div className="flex items-center mb-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center active:scale-95 transition-transform"
-          >
-            <ChevronLeft className="w-6 h-6 text-gray-900" />
-          </button>
-          <h2 className="text-xl font-bold text-gray-900 ml-4">
-            Withdraw Funds
-          </h2>
-        </div>
-
+      <div className="bg-gradient-to-b from-gray-50 to-white p-6 pb-8 border-b border-gray-200">
         <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <p className="text-gray-600 text-sm">Withdrawal amount</p>
