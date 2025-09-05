@@ -2,7 +2,7 @@ import { Bitcoin } from "lucide-react";
 
 export default function MarketScreen() {
   return (
-    <div className="min-h-screen p-6">
+    <div className="p-6">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Market</h2>
       <div className="space-y-4">
         {["Bitcoin", "Ethereum", "USDT", "BNB"].map((coin, idx) => (

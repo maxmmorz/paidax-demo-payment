@@ -25,7 +25,9 @@ export default function WithdrawScreen() {
     string | null
   >(null);
   const [amount, setAmount] = useState<string>("");
-  const [selectedSavedCard, setSelectedSavedCard] = useState<string | null>(null);
+  const [selectedSavedCard, setSelectedSavedCard] = useState<string | null>(
+    null
+  );
   const [showNewCardForm, setShowNewCardForm] = useState(false);
   const [saveCard, setSaveCard] = useState(false);
 
@@ -37,7 +39,7 @@ export default function WithdrawScreen() {
       brand: "Visa",
       expiryMonth: "12",
       expiryYear: "26",
-      holderName: "John Doe"
+      holderName: "John Doe",
     },
     {
       id: "card-2",
@@ -45,8 +47,8 @@ export default function WithdrawScreen() {
       brand: "Mastercard",
       expiryMonth: "08",
       expiryYear: "25",
-      holderName: "John Doe"
-    }
+      holderName: "John Doe",
+    },
   ]);
 
   const currencies = [
@@ -95,10 +97,28 @@ export default function WithdrawScreen() {
 
   // Fee calculation logic for withdrawals
   const calculateFee = (methodId: string, amount: number) => {
-    const fees: Record<string, { percentage?: number; fixed?: number; min?: number; max?: number }> = {
-      'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
-      'bank-card': { percentage: 1.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
-      'usdt': { fixed: selectedCurrency === 'USD' ? 3 : 0 } // Tether network fee
+    const fees: Record<
+      string,
+      { percentage?: number; fixed?: number; min?: number; max?: number }
+    > = {
+      "bank-transfer": {
+        fixed:
+          selectedCurrency === "KZT"
+            ? 500
+            : selectedCurrency === "RUB"
+            ? 30
+            : 2,
+      },
+      "bank-card": {
+        percentage: 1.5,
+        min:
+          selectedCurrency === "KZT"
+            ? 200
+            : selectedCurrency === "RUB"
+            ? 15
+            : 1,
+      },
+      usdt: { fixed: selectedCurrency === "USD" ? 3 : 0 }, // Tether network fee
     };
 
     const feeConfig = fees[methodId];
@@ -114,37 +134,56 @@ export default function WithdrawScreen() {
   };
 
   const formatFeePercentage = (methodId: string) => {
-    const fees: Record<string, { percentage?: number; fixed?: number; min?: number; max?: number }> = {
-      'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
-      'bank-card': { percentage: 1.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
-      'usdt': { fixed: selectedCurrency === 'USD' ? 3 : 0 }
+    const fees: Record<
+      string,
+      { percentage?: number; fixed?: number; min?: number; max?: number }
+    > = {
+      "bank-transfer": {
+        fixed:
+          selectedCurrency === "KZT"
+            ? 500
+            : selectedCurrency === "RUB"
+            ? 30
+            : 2,
+      },
+      "bank-card": {
+        percentage: 1.5,
+        min:
+          selectedCurrency === "KZT"
+            ? 200
+            : selectedCurrency === "RUB"
+            ? 15
+            : 1,
+      },
+      usdt: { fixed: selectedCurrency === "USD" ? 3 : 0 },
     };
 
     const feeConfig = fees[methodId];
-    if (!feeConfig) return 'Free';
+    if (!feeConfig) return "Free";
 
-    if (feeConfig.percentage === 0) return 'Free';
-    if (feeConfig.percentage && !feeConfig.fixed) return `${feeConfig.percentage}%`;
+    if (feeConfig.percentage === 0) return "Free";
+    if (feeConfig.percentage && !feeConfig.fixed)
+      return `${feeConfig.percentage}%`;
     if (feeConfig.fixed && !feeConfig.percentage) {
-      const symbol = currentCurrency?.symbol || '';
+      const symbol = currentCurrency?.symbol || "";
       return `${symbol}${feeConfig.fixed}`;
     }
     if (feeConfig.percentage && feeConfig.fixed) {
-      const symbol = currentCurrency?.symbol || '';
+      const symbol = currentCurrency?.symbol || "";
       return `${feeConfig.percentage}% + ${symbol}${feeConfig.fixed}`;
     }
 
-    return 'Free';
+    return "Free";
   };
 
   const getTransferTime = (methodId: string) => {
     const transferTimes: Record<string, string> = {
-      'bank-transfer': '1-2 business days',
-      'bank-card': 'Instant',
-      'usdt': '2-30 minutes'
+      "bank-transfer": "1-2 business days",
+      "bank-card": "Instant",
+      usdt: "2-30 minutes",
     };
-    
-    return transferTimes[methodId] || 'Unknown';
+
+    return transferTimes[methodId] || "Unknown";
   };
 
   const renderPaymentForm = (methodId: string) => {
@@ -187,13 +226,17 @@ export default function WithdrawScreen() {
               {/* Saved Cards Section */}
               {savedCards.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-3">Saved Cards</h4>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">
+                    Saved Cards
+                  </h4>
                   <div className="space-y-2">
                     {savedCards.map((card) => (
                       <button
                         key={card.id}
                         onClick={() => {
-                          setSelectedSavedCard(selectedSavedCard === card.id ? null : card.id);
+                          setSelectedSavedCard(
+                            selectedSavedCard === card.id ? null : card.id
+                          );
                           setShowNewCardForm(false);
                         }}
                         className={`w-full p-3 border rounded-xl text-left transition-colors ${
@@ -206,7 +249,7 @@ export default function WithdrawScreen() {
                           <div className="flex items-center space-x-3">
                             <div className="w-8 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded flex items-center justify-center">
                               <span className="text-xs text-white font-bold">
-                                {card.brand === 'Visa' ? 'V' : 'MC'}
+                                {card.brand === "Visa" ? "V" : "MC"}
                               </span>
                             </div>
                             <div>
@@ -214,7 +257,8 @@ export default function WithdrawScreen() {
                                 •••• •••• •••• {card.lastFour}
                               </p>
                               <p className="text-sm text-gray-600">
-                                {card.holderName} • {card.expiryMonth}/{card.expiryYear}
+                                {card.holderName} • {card.expiryMonth}/
+                                {card.expiryYear}
                               </p>
                             </div>
                           </div>
@@ -225,7 +269,7 @@ export default function WithdrawScreen() {
                       </button>
                     ))}
                   </div>
-                  
+
                   <button
                     onClick={() => {
                       setShowNewCardForm(!showNewCardForm);
@@ -244,7 +288,9 @@ export default function WithdrawScreen() {
                 <div className="space-y-4">
                   {savedCards.length > 0 && (
                     <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-medium text-gray-700">Add New Card</h4>
+                      <h4 className="text-sm font-medium text-gray-700">
+                        Add New Card
+                      </h4>
                       <button
                         onClick={() => setShowNewCardForm(false)}
                         className="text-gray-400 hover:text-gray-600"
@@ -253,7 +299,7 @@ export default function WithdrawScreen() {
                       </button>
                     </div>
                   )}
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Card Number
@@ -296,7 +342,7 @@ export default function WithdrawScreen() {
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
-                  
+
                   <div className="flex items-center space-x-2">
                     <input
                       type="checkbox"
@@ -305,7 +351,10 @@ export default function WithdrawScreen() {
                       onChange={(e) => setSaveCard(e.target.checked)}
                       className="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded"
                     />
-                    <label htmlFor="save-card-withdraw" className="text-sm text-gray-700">
+                    <label
+                      htmlFor="save-card-withdraw"
+                      className="text-sm text-gray-700"
+                    >
                       Save this card for future withdrawals
                     </label>
                   </div>
@@ -330,13 +379,13 @@ export default function WithdrawScreen() {
               )}
 
               <button className="w-full bg-primary text-white font-medium py-3 rounded-xl hover:bg-primary/90 transition-colors">
-                {selectedSavedCard ? "Withdraw to Saved Card" : "Withdraw to Card"}
+                {selectedSavedCard
+                  ? "Withdraw to Saved Card"
+                  : "Withdraw to Card"}
               </button>
             </div>
           </div>
         );
-
-
 
       case "usdt":
         return (
@@ -365,7 +414,8 @@ export default function WithdrawScreen() {
               </div>
               <div className="bg-green-50 p-3 rounded-xl">
                 <p className="text-sm text-green-700">
-                  <strong>Recommended:</strong> TRC20 network for lowest fees and fast transfers.
+                  <strong>Recommended:</strong> TRC20 network for lowest fees
+                  and fast transfers.
                 </p>
               </div>
               <button className="w-full bg-green-600 text-white font-medium py-3 rounded-xl hover:bg-green-700 transition-colors">
@@ -374,7 +424,6 @@ export default function WithdrawScreen() {
             </div>
           </div>
         );
-
 
       default:
         return (
@@ -412,7 +461,13 @@ export default function WithdrawScreen() {
   }, [selectedCurrency]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className=" bg-white">
+      {/* Page Title */}
+      <div className="px-5 py-4 border-b border-border/50">
+        <h1 className="text-lg font-semibold text-foreground">
+          Withdraw Funds
+        </h1>
+      </div>
       <div className="bg-gradient-to-b from-gray-50 to-white p-6 pb-8 border-b border-gray-200">
         <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
@@ -527,11 +582,16 @@ export default function WithdrawScreen() {
                 <div className="flex-1 text-left">
                   <p className="text-gray-900 font-medium">{method.name}</p>
                   <p className="text-gray-600 text-sm">{method.description}</p>
-                  <p className="text-gray-500 text-xs">Fee: {formatFeePercentage(method.id)}</p>
-                  <p className="text-gray-500 text-xs">{getTransferTime(method.id)}</p>
+                  <p className="text-gray-500 text-xs">
+                    Fee: {formatFeePercentage(method.id)}
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    {getTransferTime(method.id)}
+                  </p>
                   {amountNumber > 0 && (
                     <p className="text-xs text-gray-500 mt-1 font-medium">
-                      You'll receive: {currentCurrency?.symbol}{(amountNumber - fee).toFixed(2)}
+                      You'll receive: {currentCurrency?.symbol}
+                      {(amountNumber - fee).toFixed(2)}
                     </p>
                   )}
                 </div>

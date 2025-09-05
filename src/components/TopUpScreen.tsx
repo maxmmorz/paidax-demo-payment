@@ -27,7 +27,9 @@ export default function TopUpScreen() {
     string | null
   >(null);
   const [amount, setAmount] = useState<string>("");
-  const [selectedSavedCard, setSelectedSavedCard] = useState<string | null>(null);
+  const [selectedSavedCard, setSelectedSavedCard] = useState<string | null>(
+    null
+  );
   const [showNewCardForm, setShowNewCardForm] = useState(false);
   const [saveCard, setSaveCard] = useState(false);
 
@@ -39,7 +41,7 @@ export default function TopUpScreen() {
       brand: "Visa",
       expiryMonth: "12",
       expiryYear: "26",
-      holderName: "John Doe"
+      holderName: "John Doe",
     },
     {
       id: "card-2",
@@ -47,8 +49,8 @@ export default function TopUpScreen() {
       brand: "Mastercard",
       expiryMonth: "08",
       expiryYear: "25",
-      holderName: "John Doe"
-    }
+      holderName: "John Doe",
+    },
   ]);
 
   const currencies = [
@@ -117,12 +119,30 @@ export default function TopUpScreen() {
 
   // Fee calculation logic
   const calculateFee = (methodId: string, amount: number) => {
-    const fees: Record<string, { percentage?: number; fixed?: number; min?: number; max?: number }> = {
-      'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
-      'bank-card': { percentage: 2.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
-      'kaspi': { percentage: 0 }, // Free for popular method
-      'apple-pay': { percentage: 2.9 },
-      'usdt': { fixed: selectedCurrency === 'USD' ? 5 : 0 }
+    const fees: Record<
+      string,
+      { percentage?: number; fixed?: number; min?: number; max?: number }
+    > = {
+      "bank-transfer": {
+        fixed:
+          selectedCurrency === "KZT"
+            ? 500
+            : selectedCurrency === "RUB"
+            ? 30
+            : 2,
+      },
+      "bank-card": {
+        percentage: 2.5,
+        min:
+          selectedCurrency === "KZT"
+            ? 200
+            : selectedCurrency === "RUB"
+            ? 15
+            : 1,
+      },
+      kaspi: { percentage: 0 }, // Free for popular method
+      "apple-pay": { percentage: 2.9 },
+      usdt: { fixed: selectedCurrency === "USD" ? 5 : 0 },
     };
 
     const feeConfig = fees[methodId];
@@ -138,41 +158,60 @@ export default function TopUpScreen() {
   };
 
   const formatFeePercentage = (methodId: string) => {
-    const fees: Record<string, { percentage?: number; fixed?: number; min?: number; max?: number }> = {
-      'bank-transfer': { fixed: selectedCurrency === 'KZT' ? 500 : selectedCurrency === 'RUB' ? 30 : 2 },
-      'bank-card': { percentage: 2.5, min: selectedCurrency === 'KZT' ? 200 : selectedCurrency === 'RUB' ? 15 : 1 },
-      'kaspi': { percentage: 0 },
-      'apple-pay': { percentage: 2.9 },
-      'usdt': { fixed: selectedCurrency === 'USD' ? 5 : 0 }
+    const fees: Record<
+      string,
+      { percentage?: number; fixed?: number; min?: number; max?: number }
+    > = {
+      "bank-transfer": {
+        fixed:
+          selectedCurrency === "KZT"
+            ? 500
+            : selectedCurrency === "RUB"
+            ? 30
+            : 2,
+      },
+      "bank-card": {
+        percentage: 2.5,
+        min:
+          selectedCurrency === "KZT"
+            ? 200
+            : selectedCurrency === "RUB"
+            ? 15
+            : 1,
+      },
+      kaspi: { percentage: 0 },
+      "apple-pay": { percentage: 2.9 },
+      usdt: { fixed: selectedCurrency === "USD" ? 5 : 0 },
     };
 
     const feeConfig = fees[methodId];
-    if (!feeConfig) return 'Free';
+    if (!feeConfig) return "Free";
 
-    if (feeConfig.percentage === 0) return 'Free';
-    if (feeConfig.percentage && !feeConfig.fixed) return `${feeConfig.percentage}%`;
+    if (feeConfig.percentage === 0) return "Free";
+    if (feeConfig.percentage && !feeConfig.fixed)
+      return `${feeConfig.percentage}%`;
     if (feeConfig.fixed && !feeConfig.percentage) {
-      const symbol = currentCurrency?.symbol || '';
+      const symbol = currentCurrency?.symbol || "";
       return `${symbol}${feeConfig.fixed}`;
     }
     if (feeConfig.percentage && feeConfig.fixed) {
-      const symbol = currentCurrency?.symbol || '';
+      const symbol = currentCurrency?.symbol || "";
       return `${feeConfig.percentage}% + ${symbol}${feeConfig.fixed}`;
     }
 
-    return 'Free';
+    return "Free";
   };
 
   const getTransferTime = (methodId: string) => {
     const transferTimes: Record<string, string> = {
-      'bank-transfer': '1-2 business days',
-      'bank-card': 'Instant',
-      'kaspi': 'Instant',
-      'apple-pay': 'Instant',
-      'usdt': '10-30 minutes'
+      "bank-transfer": "1-2 business days",
+      "bank-card": "Instant",
+      kaspi: "Instant",
+      "apple-pay": "Instant",
+      usdt: "10-30 minutes",
     };
-    
-    return transferTimes[methodId] || 'Unknown';
+
+    return transferTimes[methodId] || "Unknown";
   };
 
   const renderPaymentForm = (methodId: string) => {
@@ -215,13 +254,17 @@ export default function TopUpScreen() {
               {/* Saved Cards Section */}
               {savedCards.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-3">Saved Cards</h4>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">
+                    Saved Cards
+                  </h4>
                   <div className="space-y-2">
                     {savedCards.map((card) => (
                       <button
                         key={card.id}
                         onClick={() => {
-                          setSelectedSavedCard(selectedSavedCard === card.id ? null : card.id);
+                          setSelectedSavedCard(
+                            selectedSavedCard === card.id ? null : card.id
+                          );
                           setShowNewCardForm(false);
                         }}
                         className={`w-full p-3 border rounded-xl text-left transition-colors ${
@@ -234,7 +277,7 @@ export default function TopUpScreen() {
                           <div className="flex items-center space-x-3">
                             <div className="w-8 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded flex items-center justify-center">
                               <span className="text-xs text-white font-bold">
-                                {card.brand === 'Visa' ? 'V' : 'MC'}
+                                {card.brand === "Visa" ? "V" : "MC"}
                               </span>
                             </div>
                             <div>
@@ -242,7 +285,8 @@ export default function TopUpScreen() {
                                 •••• •••• •••• {card.lastFour}
                               </p>
                               <p className="text-sm text-gray-600">
-                                {card.holderName} • {card.expiryMonth}/{card.expiryYear}
+                                {card.holderName} • {card.expiryMonth}/
+                                {card.expiryYear}
                               </p>
                             </div>
                           </div>
@@ -253,7 +297,7 @@ export default function TopUpScreen() {
                       </button>
                     ))}
                   </div>
-                  
+
                   <button
                     onClick={() => {
                       setShowNewCardForm(!showNewCardForm);
@@ -272,7 +316,9 @@ export default function TopUpScreen() {
                 <div className="space-y-4">
                   {savedCards.length > 0 && (
                     <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-medium text-gray-700">Add New Card</h4>
+                      <h4 className="text-sm font-medium text-gray-700">
+                        Add New Card
+                      </h4>
                       <button
                         onClick={() => setShowNewCardForm(false)}
                         className="text-gray-400 hover:text-gray-600"
@@ -281,7 +327,7 @@ export default function TopUpScreen() {
                       </button>
                     </div>
                   )}
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Card Number
@@ -324,7 +370,7 @@ export default function TopUpScreen() {
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
-                  
+
                   <div className="flex items-center space-x-2">
                     <input
                       type="checkbox"
@@ -333,7 +379,10 @@ export default function TopUpScreen() {
                       onChange={(e) => setSaveCard(e.target.checked)}
                       className="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded"
                     />
-                    <label htmlFor="save-card" className="text-sm text-gray-700">
+                    <label
+                      htmlFor="save-card"
+                      className="text-sm text-gray-700"
+                    >
                       Save this card for future payments
                     </label>
                   </div>
@@ -391,22 +440,24 @@ export default function TopUpScreen() {
           </div>
         );
 
-
       case "apple-pay":
         return (
           <div className="pt-4 border-t border-gray-100">
             <div className="space-y-4">
               <div className="bg-gray-50 p-3 rounded-xl">
                 <p className="text-sm text-gray-700">
-                  Use Touch ID or Face ID to complete your payment with Apple Pay.
-                  {selectedCurrency === 'KZT' && ' Apple Pay now supports KZT payments in Kazakhstan.'}
+                  Use Touch ID or Face ID to complete your payment with Apple
+                  Pay.
+                  {selectedCurrency === "KZT" &&
+                    " Apple Pay now supports KZT payments in Kazakhstan."}
                 </p>
               </div>
               <div className="bg-blue-50 p-3 rounded-xl">
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <p className="text-sm text-blue-700">
-                    Instant payment • 2.9% processing fee • Secure biometric authentication
+                    Instant payment • 2.9% processing fee • Secure biometric
+                    authentication
                   </p>
                 </div>
               </div>
@@ -454,7 +505,13 @@ export default function TopUpScreen() {
   }, [selectedCurrency]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className=" bg-white">
+      {/* Page Title */}
+      <div className="px-5 py-4 border-b border-border/50">
+        <h1 className="text-lg font-semibold text-foreground">
+          Top Up Account
+        </h1>
+      </div>
       <div className="bg-gradient-to-b from-gray-50 to-white p-6 pb-8 border-b border-gray-200">
         <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
@@ -559,11 +616,16 @@ export default function TopUpScreen() {
                 <div className="flex-1 text-left">
                   <p className="text-gray-900 font-medium">{method.name}</p>
                   <p className="text-gray-600 text-sm">{method.description}</p>
-                  <p className="text-gray-500 text-xs">Fee: {formatFeePercentage(method.id)}</p>
-                  <p className="text-gray-500 text-xs">{getTransferTime(method.id)}</p>
+                  <p className="text-gray-500 text-xs">
+                    Fee: {formatFeePercentage(method.id)}
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    {getTransferTime(method.id)}
+                  </p>
                   {amountNumber > 0 && (
                     <p className="text-xs text-gray-500 mt-1 font-medium">
-                      Total: {currentCurrency?.symbol}{(amountNumber + fee).toFixed(2)}
+                      Total: {currentCurrency?.symbol}
+                      {(amountNumber + fee).toFixed(2)}
                     </p>
                   )}
                 </div>

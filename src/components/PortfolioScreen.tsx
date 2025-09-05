@@ -21,7 +21,7 @@ export default function PortfolioScreen() {
   };
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="p-6 pb-12">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Portfolio</h2>
         <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">

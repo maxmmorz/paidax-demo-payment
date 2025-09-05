@@ -1,6 +1,6 @@
 export default function MainScreen() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6">
+    <div className="flex flex-col items-center justify-center p-6">
       <div className="text-center space-y-6">
         <h1 className="text-3xl font-bold text-gray-900">Paidax</h1>
         <p className="text-gray-600">Investment Platform</p>
