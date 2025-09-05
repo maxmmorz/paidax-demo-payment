@@ -34,7 +34,7 @@ export default function Layout() {
           </div>
         </div>
 
-        <div className="flex-1 pb-20 overflow-y-auto">
+        <div className="flex-1 pb-20">
           <Outlet />
         </div>
 
